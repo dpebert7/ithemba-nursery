@@ -41,9 +41,17 @@ shinyServer(function(input, output, session) {
 
   output$hot <- renderRHandsontable({
     DF <- values[["DF"]]
-    DF$Total = DF$Qty * DF$Cost
+    DF$Total = DF$Qty*DF$Cost
+    DF$Total = na_if(DF$Total,0)
+    total_cost = sum(DF$Total)
+    #na_if(DF$Qty,0)
+    #print(DF$Qty)
     if(!is.null(DF))
-      rhandsontable(DF, useTypes = TRUE, stretchH = "allf")
+      rhandsontable(DF, stretchH = "allf", rowHeaders = NULL, height = 303) %>% 
+      hot_col(c("Description", "Cost", "Total"), readOnly = TRUE) %>%
+      hot_col(c("Cost","Total"), format = "ZAR0.00", language = "en-ZA") %>%
+      #hot_rows(fixedRowsTop = 1) %>%
+      hot_validate_numeric("Qty", min = 0, max = 1000)
   })
   
   # When the Submit button is clicked 

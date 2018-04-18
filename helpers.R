@@ -5,16 +5,18 @@ outfilename="gradebook1"
 
 if("nursery_price_list_raw.csv" %in% list.files(outdir)){
   DF = read.csv("nursery_price_list_raw.csv")
+  DF$Description = paste(DF$Description, " (", DF$Unit, ")", sep = "")
+  DF$Unit = NULL
 }else{
   DF <- data.frame(
     Total = rep(0.0,5),
     Qty = integer(5),
     Unit = c("Plug", "Plug", "Plug", "Plug", "Plug"),
     Price = rep(1.5,5),
-    Description = c("Beetroot", "Broccoli", "Cabbage", "Carrot", "Cauliflowerf"))
+    Description = c("Beetroot", "Broccoli", "Cabbage", "Carrot", "Cauliflower"))
 }
 
-
+total_cost = sum(DF$Total)
 
 # mandatory fields in the form
 fields_mandatory <- c(

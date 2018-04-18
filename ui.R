@@ -1,21 +1,28 @@
 library(shiny)
 library(rhandsontable)
 
-
 # To run:
-# shiny::runApp('~/Desktop/Link to GitRepos/ithemba-garden')
+# shiny::runApp('~/Desktop/Link to GitRepos/ithemba-nursery')
+# To run template:
+# shiny::runApp('~/Desktop/shiny-server')
 
-storage_types <- c("Google Sheets (remote)" = "gsheets")
+#storage_types <- c("Google Sheets (remote)" = "gsheets")
+
 
 
 shinyUI(fluidPage(
-  title = "iThemba Gardens",
   shinyjs::useShinyjs(),
   tags$head(includeCSS(file.path("www", "app.css"))),
+
   div(id = "header",
-      div(id = "title", "iThemba Gardens")
+      h1(img(src='ithemba-nursery-logo.jpg', width='90%')),
+  div(id = "title",
+    "Order Request"
+    )
   ),
-  
+
+# TABS
+
   fluidRow(
     column(8, wellPanel(
       tabsetPanel(
@@ -25,17 +32,17 @@ shinyUI(fluidPage(
 
         tabPanel(
           title = "About", id ="aboutTab", value = "aboutTab",
-          h2("This is some about stuff")
-        ),    
+          includeMarkdown(file.path("text", "about.md"))
+          ),    
+
         
 
 # SECOND TAB: PICKUP
 
         tabPanel(
-          title = "Pickup", id = "pickupTab", value = "pickupTab",
-          h2("This is some pickup stuff")
-          ),        
-
+          title = "Collection Points", id ="collectionTab", value = "collectionTab",
+          includeMarkdown(file.path("text", "collection.md"))
+        ),
 
 # THIRD TAB: FORM
 
@@ -45,7 +52,7 @@ shinyUI(fluidPage(
         #   h2("This is some form stuff")
         # )   
         tabPanel(
-          title = "Order Form", id = "submitTab", value = "submitTab",
+          title = "Order Form", id = "orderTab", value = "orderTab",
 
           br(),
           div(id = "form",
@@ -60,18 +67,31 @@ shinyUI(fluidPage(
                           "Hilton Produce Exchange (3rd Saturday of each month)",
                           "La Popote Restaurant (Every Friday)"),
                         width = "100%"),
-          textInput("comment", "Comments or Suggestions", width = "100%", 
-                    placeholder = "Comments, questions, suggestions"),
           
           # RHOT
+          
           rHandsontableOutput("hot"),
           br(),
           
+          # Total Cost
+          h2("Total Cost:"),
+          print(total_cost),
+          br(),
+          br(),
+          
+          # Comment
+          textAreaInput(inputId = "comment", label = "Comments:", width ="150%", 
+                        placeholder = "Comments, questions, suggestions"),
+          br(),
+          
+          # Submit Button
           actionButton("submit", "Submit", class = "btn-primary"),
           shinyjs::hidden(
             span(id = "submitMsg", "Submitting...", style = "margin-left: 15px;")
             )
           ),
+          
+          # Print Error messages
           shinyjs::hidden(
             div(id = "error",
                 div(br(), tags$b("Error: "), span(id = "errorMsg")),

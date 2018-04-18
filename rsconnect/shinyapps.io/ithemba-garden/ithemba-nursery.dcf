@@ -1,0 +1,12 @@
+name: ithemba-nursery
+title: ithemba-nursery
+username:
+account: ithemba-garden
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 324999
+bundleId: 1324892
+url: https://ithemba-garden.shinyapps.io/ithemba-nursery/
+when: 1524037372.98901
+asMultiple: FALSE
+asStatic: FALSE
