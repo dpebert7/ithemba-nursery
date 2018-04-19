@@ -26,32 +26,42 @@ shinyServer(function(input, output, session) {
   
   # Hands On Table
   values <- reactiveValues()
-  
+
   observe({
-    if (!is.null(input$hot)) {
-      DF = hot_to_r(input$hot)
+    if (!is.null(input$hot_stock)) {
+      DF = hot_to_r(input$hot_stock)
     } else {
       if (is.null(values[["DF"]]))
         DF <- DF
       else
         DF <- values[["DF"]]
     }
+    total_cost = sum(DF$Total, na.rm = TRUE)
+    mini_DF <- as.data.frame(total_cost)
+    colnames(mini_DF) = "Total Cost"
     values[["DF"]] <- DF
+    values[["mini_DF"]] <- mini_DF
   })
 
-  output$hot <- renderRHandsontable({
+
+  output$hot_stock <- renderRHandsontable({
     DF <- values[["DF"]]
     DF$Total = DF$Qty*DF$Cost
     DF$Total = na_if(DF$Total,0)
-    total_cost = sum(DF$Total)
-    #na_if(DF$Qty,0)
-    #print(DF$Qty)
     if(!is.null(DF))
       rhandsontable(DF, stretchH = "allf", rowHeaders = NULL, height = 303) %>% 
       hot_col(c("Description", "Cost", "Total"), readOnly = TRUE) %>%
-      hot_col(c("Cost","Total"), format = "ZAR0.00", language = "en-ZA") %>%
-      #hot_rows(fixedRowsTop = 1) %>%
+      hot_col(c("Cost","Total"), format = "$ 0.00", language = "en-ZA") %>%
+      hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
       hot_validate_numeric("Qty", min = 0, max = 1000)
+  })
+  
+  output$hot_cost <- renderRHandsontable({
+    mini_DF = values[["mini_DF"]]
+    rhandsontable(mini_DF, stretchH = "all", width = 120,
+                  rowHeaders = NULL, readOnly = TRUE) %>%
+    hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
+    hot_col("Total Cost", format = "$ 0.00", language = "en-ZA")
   })
   
   # When the Submit button is clicked 
@@ -87,13 +97,4 @@ shinyServer(function(input, output, session) {
     input$submit
     load_data(input$storage)
   })
-  
-  # Show the responses in a table
-  output$responsesTable <- DT::renderDataTable(
-    DT::datatable(
-      responses_data(),
-      rownames = FALSE,
-      options = list(searching = FALSE, lengthChange = FALSE, scrollX = TRUE)
-    )
-  )
 })

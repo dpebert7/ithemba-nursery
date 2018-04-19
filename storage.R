@@ -2,17 +2,11 @@
 library(markdown)
 library(dplyr)
 library(digest)
-#library(DBI)
-#library(RMySQL)
-#library(RSQLite)
-#library(mongolite)
-
 library(googlesheets)
-#library(aws.s3)
-#library(rdrop2)
 
-DB_NAME <- "shinyapps"
-TABLE_NAME <- "google_form_mock"
+
+#DB_NAME <- "shinyapps"
+#TABLE_NAME <- "google_form_mock"
 
 
 load_data <- function(type) {

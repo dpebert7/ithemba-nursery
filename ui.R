@@ -70,12 +70,13 @@ shinyUI(fluidPage(
           
           # RHOT
           
-          rHandsontableOutput("hot"),
+          rHandsontableOutput("hot_stock"),
           br(),
           
           # Total Cost
-          h2("Total Cost:"),
-          print(total_cost),
+          rHandsontableOutput("hot_cost"),
+          #h2("Total Cost:"),
+          #print(total_cost),
           br(),
           br(),
           
