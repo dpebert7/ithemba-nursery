@@ -5,8 +5,9 @@ account: dpebert
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 325010
-bundleId: 1324966
+bundleId: 1414675
 url: https://dpebert.shinyapps.io/ithemba-nursery/
-when: 1524040180.59496
+when: 1528289319.51883
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: nursery_price_list_raw.csv|nursery price list.xlsx|test_output.csv|test_output.R|www/github-orange-right.png|www/header.jpg

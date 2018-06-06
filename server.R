@@ -1,11 +1,13 @@
 library(shiny)
 library(rhandsontable)
 library(magrittr)
+library(mailR)
 
 source("storage.R")
 source("helpers.R")
 
 shinyServer(function(input, output, session) {
+  
   # Give an initial value to the timestamp field
   updateTextInput(session, "timestamp", value = get_time_epoch())
   
@@ -49,19 +51,21 @@ shinyServer(function(input, output, session) {
     DF$Total = DF$Qty*DF$Cost
     DF$Total = na_if(DF$Total,0)
     if(!is.null(DF))
-      rhandsontable(DF, stretchH = "allf", rowHeaders = NULL, height = 303) %>% 
+      rhandsontable(DF, stretchH = "allf", rowHeaders = NULL, height = 603) %>% 
       hot_col(c("Description", "Cost", "Total"), readOnly = TRUE) %>%
       hot_col(c("Cost","Total"), format = "$ 0.00", language = "en-ZA") %>%
       hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
       hot_validate_numeric("Qty", min = 0, max = 1000)
   })
   
+  
   output$hot_cost <- renderRHandsontable({
     mini_DF = values[["mini_DF"]]
-    rhandsontable(mini_DF, stretchH = "all", width = 120,
+    rhandsontable(mini_DF, width = 150,
                   rowHeaders = NULL, readOnly = TRUE) %>%
     hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
-    hot_col("Total Cost", format = "$ 0.00", language = "en-ZA")
+    hot_col("Total Cost", format = "$ 0.00", language = "en-ZA") %>%
+    hot_col("Total Cost", width=120)
   })
   
   # When the Submit button is clicked 
@@ -80,10 +84,46 @@ shinyServer(function(input, output, session) {
     
     # Save the data (show an error message in case of error)
     tryCatch({
-      save_data(form_data(), input$storage)
+      # Gather necessary data
+      form_df = form_data()
+      order_df = values[["DF"]]
+      order_df = order_df[!is.na(order_df$Total),]
+      total_cost_df = values[["mini_DF"]]
+      invoice_name = paste0(form_df[[1]],"-",num_worksheets)
+      customer_info = data.frame(
+        c("Invoice Name:", "Name:", "Email:", "Phone:", "Pickup:", "Preferred Contact:", 
+          "Comment:", "Timestamp:", "Total Cost"), 
+        c(invoice_name, form_df[[1]], form_df[[2]], form_df[[3]], form_df[[4]], form_df[[5]], 
+          form_df[[6]], form_df[[7]], as.character(sum(order_df$Total))))
+      names(customer_info) = NULL
+      
+      # save customer info to new line
+      customer_info_doc <- customer_info_doc %>% 
+        gs_add_row(input = t(form_df))
+      
+      # Save customer and order info to invoice sheet
+      invoices_doc <- invoices_doc %>%
+        gs_ws_new(ws_title = invoice_name, row_extent = 50, col_extent = 8) %>%
+        gs_edit_cells(ws = invoice_name, input = customer_info)  %>%
+        gs_edit_cells(ws = invoice_name, input = order_df, anchor = "R11C1")
+      
+      # Send Email
+      send.mail(from = "ithembagardens@gmail.com",
+                to = c("dpebert7@gmail.com", "ithembagardens@gmail.com"),
+                subject = "New Order",
+                body = paste("New iThemba Gardens order. Invoice:", invoice_name),
+                smtp = list(host.name = "smtp.gmail.com", port = 465, 
+                            user.name = "ithembagardens", 
+                            passwd = "123Password!", ssl = TRUE),
+                authenticate = TRUE,
+                send = TRUE)
+      
+      
+      # Reset
       shinyjs::reset("form")
       updateTabsetPanel(session, "mainTabs", "viewTab")
     },
+    
     error = function(err) {
       shinyjs::html("errorMsg", err$message)
       shinyjs::show(id = "error", anim = TRUE, animType = "fade")      
@@ -93,8 +133,8 @@ shinyServer(function(input, output, session) {
 
   # Update the responses whenever a new submission is made or the
   # storage type is changed
-  responses_data <- reactive({
-    input$submit
-    load_data(input$storage)
-  })
+  #responses_data <- reactive({
+  #  input$submit
+  #  load_data(input$storage)
+  #})
 })

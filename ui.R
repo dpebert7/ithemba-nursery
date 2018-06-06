@@ -7,9 +7,6 @@ library(rhandsontable)
 # shiny::runApp('~/Desktop/shiny-server')
 
 #storage_types <- c("Google Sheets (remote)" = "gsheets")
-
-
-
 shinyUI(fluidPage(
   shinyjs::useShinyjs(),
   tags$head(includeCSS(file.path("www", "app.css"))),
@@ -68,12 +65,11 @@ shinyUI(fluidPage(
                           "La Popote Restaurant (Every Friday)"),
                         width = "100%"),
           
-          # RHOT
-          
+          # RHOT for stock and order
           rHandsontableOutput("hot_stock"),
           br(),
           
-          # Total Cost
+          # Simple RHOT showing Total Cost
           rHandsontableOutput("hot_cost"),
           #h2("Total Cost:"),
           #print(total_cost),
@@ -88,7 +84,7 @@ shinyUI(fluidPage(
           # Submit Button
           actionButton("submit", "Submit", class = "btn-primary"),
           shinyjs::hidden(
-            span(id = "submitMsg", "Submitting...", style = "margin-left: 15px;")
+            span(id = "submitMsg", "Submitting Order...", style = "margin-left: 15px;")
             )
           ),
           
@@ -101,7 +97,10 @@ shinyUI(fluidPage(
           ),
 
           # hidden input field tracking the timestamp of the submission
-          shinyjs::hidden(textInput("timestamp", ""))
+          shinyjs::hidden(textInput("timestamp", "")),
+          
+          # Include markdown showing banking details
+          includeMarkdown(file.path("text", "banking.md"))
         )
       )
     ))

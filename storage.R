@@ -1,39 +1,66 @@
-#install.packages("markdown")
 library(markdown)
 library(dplyr)
 library(digest)
 library(googlesheets)
+library(magrittr)
 
 
-#DB_NAME <- "shinyapps"
-#TABLE_NAME <- "google_form_mock"
+#######################################
+### RETRIEVE INVENTORY FROM STORAGE ###
+#######################################
 
 
-load_data <- function(type) {
-  fxn <- get_load_fxn(type)
-  data <- do.call(fxn, list())
-  
-  # Just for a nicer UI, if there is no data, construct an empty
-  # dataframe so that the colnames will still be shown
-  if (nrow(data) == 0) {
-    data <-
-      matrix(nrow = 0, ncol = length(fields_all),
-             dimnames = list(list(), fields_all)) %>%
-      data.frame
-  }
-  data %>% dplyr::arrange(desc(timestamp))
-}
+DF = as.data.frame(gs_read(gs_key("1WA_w-SioIsRP2iON4LFGdvxpMx3dYMLoPO9d_kYHpmY")))
 
-#### Method 5: Google Sheets ####
+###
+# Below works if running locally. It is commented out for web app version
+###
+# google_sheet_titles = gs_ls()$sheet_title
+# if("ithemba-nursery-inventory-list" %in% google_sheet_titles){
+#   google_inventory <- gs_title("ithemba-nursery-inventory-list")
+#   DF = as.data.frame(gs_read(google_inventory))
+# }else if("nursery_price_list_raw.csv" %in% list.files(outdir)){
+#   DF = read.csv("nursery_price_list_raw.csv")
+#   DF$Description = paste(DF$Description, " (", DF$Unit, ")", sep = "")
+#   DF$Unit = NULL
+# } else {
+#   DF <- data.frame(
+#     Total = rep(0.0,5),
+#     Qty = integer(5),
+#     Unit = c("Plug", "Plug", "Plug", "Plug", "Plug"),
+#     Price = rep(1.5,5),
+#     Description = c("Beetroot", "Broccoli", "Cabbage", "Carrot", "Cauliflower"))
+# }
 
-#gs_auth() #token = "googlesheets_token.rds"
+# Cleanup inventory list
+DF = DF[!is.na(DF$Cost),]
+DF = DF[DF$Cost>=0,]
 
-save_data_gsheets <- function(data) {
-  #print(TABLE_NAME)
-  #print(gs_title)
-  #print(data)
-  TABLE_NAME %>% gs_title %>% gs_add_row(input = t(data))
-}
-load_data_gsheets <- function() {
-  TABLE_NAME %>% gs_title %>% gs_read_csv
-}
+# Make mini_DF showing total cost
+mini_DF <- as.data.frame(0)
+colnames(mini_DF) <- c("Total Cost")
+
+#############################
+### CUSTOMER INFO STORAGE ###
+#############################
+
+# Register sheet created previously in Google Drive
+# This sheet must have the correct columns and at least one row of info already supplied
+
+customer_info_doc <- gs_key("1kLgwG-wXpWzyOyPYiqwE2vklV5lWUlZkqE-vbPMVO-M")
+
+
+
+
+#######################
+### INVOICE STORAGE ###
+#######################
+
+# Run once only in order to get key for invoice sheet
+#gs_new("ithemba-gardens-invoices")
+
+# Register sheet
+invoices_doc <- gs_key("1nEgjeMrNZYPhfVy27_4v8kEeeIWYTzdCBkdEQoOvPIU")
+num_worksheets = invoices_doc$n_ws
+
+
