@@ -1,10 +1,10 @@
-### How do I order?
+### How do I Order?
 
 1. Complete the order form and choose pickup location.
 
 2. We will message you an invoice and banking details. EFT the amount & make sure to use your invoice in the reference.
 
-3. Collect your oder from your desired pickup location.
+3. Collect your order from your desired pickup location.
 
 ---
 

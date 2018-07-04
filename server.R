@@ -52,8 +52,8 @@ shinyServer(function(input, output, session) {
     DF$Total = na_if(DF$Total,0)
     if(!is.null(DF))
       rhandsontable(DF, stretchH = "allf", rowHeaders = NULL, height = 603) %>% 
-      hot_col(c("Description", "Cost", "Total"), readOnly = TRUE) %>%
-      hot_col(c("Cost","Total"), format = "$ 0.00", language = "en-ZA") %>%
+      hot_col(c("Description", "Cost", "Total", "Season", "In Stock"), readOnly = TRUE) %>%
+      hot_col(c("Cost","Total"), format = "$ 0/.00", language = "en-ZA") %>%
       hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
       hot_validate_numeric("Qty", min = 0, max = 1000)
   })
@@ -64,7 +64,7 @@ shinyServer(function(input, output, session) {
     rhandsontable(mini_DF, width = 150,
                   rowHeaders = NULL, readOnly = TRUE) %>%
     hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
-    hot_col("Total Cost", format = "$ 0.00", language = "en-ZA") %>%
+    hot_col("Total Cost", format = "$ 0/.00", language = "en-ZA") %>%
     hot_col("Total Cost", width=120)
   })
   
@@ -89,6 +89,7 @@ shinyServer(function(input, output, session) {
       order_df = values[["DF"]]
       order_df = order_df[!is.na(order_df$Total),]
       total_cost_df = values[["mini_DF"]]
+      num_worksheets = invoices_doc$n_ws
       invoice_name = paste0(form_df[[1]],"-",num_worksheets)
       customer_info = data.frame(
         c("Invoice Name:", "Name:", "Email:", "Phone:", "Pickup:", "Preferred Contact:", 

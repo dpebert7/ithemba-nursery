@@ -61,6 +61,4 @@ customer_info_doc <- gs_key("1kLgwG-wXpWzyOyPYiqwE2vklV5lWUlZkqE-vbPMVO-M")
 
 # Register sheet
 invoices_doc <- gs_key("1nEgjeMrNZYPhfVy27_4v8kEeeIWYTzdCBkdEQoOvPIU")
-num_worksheets = invoices_doc$n_ws
-
 
