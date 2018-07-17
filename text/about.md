@@ -1,11 +1,16 @@
 ### How do I Order?
 
-1. Complete the order form and choose pickup location.
+1. **Complete** the order form and choose a pickup location. We will send you an invoice with banking details.
 
-2. We will message you an invoice and banking details. EFT the amount & make sure to use your invoice in the reference.
+2. **Pay** via EFT & make sure to use your invoice number as the reference.
 
-3. Collect your order from your desired pickup location.
+3. **Collect** your order from your desired pickup location.
+
+4. **Enjoy** your organically-grown seedlings!
 
 ---
 
 Thanks for supporting quality nutrition in Sweetwaters!
+
+You can also [learn more about our story](https://ithembaprojects.exposure.co/sustainable-nutrition  "iThemba Projects on Exposure") and follow us on [Facebook](https://www.facebook.com/iThembaNursery/ "iThemba Gardens on Facebook").
+

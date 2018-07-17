@@ -1,19 +1,10 @@
-*Thanks for your order!* We'll email an invoice shortly. 
+*Thanks for your order!* We'll email an invoice shortly.
 
-
-
-**Banking details**:
-
-iThemba Trust Sweetwaters
-
-FNB
-
-Branch: Bank Street
-
-Branch Code: 220 825
-
-Acc No: 6215 408 3407
-
-Ref: Invoice Number
-
-Proof of Payment: lunga@ithembaprojects.org.za
+| iThemba Trust Sweetwaters |                         |
+|----------------------|------------------------------|
+| Bank:                | FNB                          |
+| Branch:              | Bank Street                  |
+| Ref:                 | Invoice Number               |
+| Branch Code:         | 220 825                      |
+| Account No:          | 6215 408 3407                |
+| Proof of Payment:    | lunga@ithembaprojects.org.za |

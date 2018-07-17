@@ -119,6 +119,15 @@ shinyServer(function(input, output, session) {
                 authenticate = TRUE,
                 send = TRUE)
       
+      #send.mail(from= "ithembagardens@gmail.com",
+      #          to = form_df[[2]],
+      #          subject = "Your iThemba Gardens Order",
+      #          body = paste("This is the body. More info to come later."),
+      #          smtp = list(host.name = "smtp.gmail.com", port = 465, 
+      #                      user.name = "ithembagardens", 
+      #                      passwd = "123Password!", ssl = TRUE),
+      #          authenticate = TRUE,
+      #          send = TRUE)
       
       # Reset
       shinyjs::reset("form")
@@ -130,6 +139,9 @@ shinyServer(function(input, output, session) {
       shinyjs::show(id = "error", anim = TRUE, animType = "fade")      
       shinyjs::logjs(err)
     })
+    
+    shinyjs::html("successMsg")
+    shinyjs::show(id="success", anim = TRUE, animType = "fade")
   })
 
   # Update the responses whenever a new submission is made or the

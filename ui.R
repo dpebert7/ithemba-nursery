@@ -21,7 +21,7 @@ shinyUI(fluidPage(
 # TABS
 
   fluidRow(
-    column(8, wellPanel(
+    column(12, wellPanel(
       tabsetPanel(
         id = "mainTabs", type = "tabs",
         
@@ -92,15 +92,26 @@ shinyUI(fluidPage(
           shinyjs::hidden(
             div(id = "error",
                 div(br(), tags$b("Error: "), span(id = "errorMsg")),
-                style = "color: red;"
+                style = "color: red;",
+                "Please try again"
+            )
+          ),
+          
+          # Show Success message
+          shinyjs::hidden(
+            div(id = "success",
+                div(br(), span(id = "successMsg")),
+                "Thanks for your order! We'll email your invoice shortly."
             )
           ),
 
           # hidden input field tracking the timestamp of the submission
-          shinyjs::hidden(textInput("timestamp", "")),
+          shinyjs::hidden(textInput("timestamp", ""))#,
+          
+          #div(br()),
           
           # Include markdown showing banking details
-          includeMarkdown(file.path("text", "banking.md"))
+          #includeMarkdown(file.path("text", "banking.md"))
         )
       )
     ))
