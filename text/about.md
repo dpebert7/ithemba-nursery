@@ -10,7 +10,6 @@
 
 ---
 
+You can also [learn more about our story](https://ithembaprojects.exposure.co/sustainable-nutrition  "iThemba Nursery on Exposure") and follow us on [Facebook](https://www.facebook.com/iThembaNursery/ "iThemba Nursery on Facebook").
+
 Thanks for supporting quality nutrition in Sweetwaters!
-
-You can also [learn more about our story](https://ithembaprojects.exposure.co/sustainable-nutrition  "iThemba Projects on Exposure") and follow us on [Facebook](https://www.facebook.com/iThembaNursery/ "iThemba Gardens on Facebook").
-

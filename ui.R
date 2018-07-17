@@ -101,7 +101,8 @@ shinyUI(fluidPage(
           shinyjs::hidden(
             div(id = "success",
                 div(br(), span(id = "successMsg")),
-                "Thanks for your order! We'll email your invoice shortly."
+                "Success! We'll confirm your order and email an invoice shortly.",
+                "Thanks for supporting quality nutrition in Sweetwaters!"
             )
           ),
 
