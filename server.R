@@ -55,7 +55,7 @@ shinyServer(function(input, output, session) {
     if(!is.null(DF))
       rhandsontable(DF, stretchH = "allf", rowHeaders = NULL, height = 603) %>%  
                                                               #Can also try 1303 for height
-      hot_col(c("Description", "Cost", "Total", "Season", "In Stock"), readOnly = TRUE) %>%
+      hot_col(c("Description", "Cost", "Total", "Season", "Unit", "In Stock"), readOnly = TRUE) %>%
       hot_col(c("Cost","Total"), format = "$ 0/.00", language = "en-ZA") %>%
       #hot_col("Qty", td.style.background = 'grey') %>% # This isn't working :(
       hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
