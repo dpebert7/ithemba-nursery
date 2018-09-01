@@ -34,6 +34,8 @@ DF = as.data.frame(gs_read(gs_key("1WA_w-SioIsRP2iON4LFGdvxpMx3dYMLoPO9d_kYHpmY"
 
 # Cleanup inventory list
 DF = DF[!is.na(DF$Cost),]
+DF = DF[DF$`In Stock` == "Yes",]
+DF$`In Stock` = NULL
 DF = DF[DF$Cost>=0,]
 
 # Make mini_DF showing total cost
@@ -61,4 +63,10 @@ customer_info_doc <- gs_key("1kLgwG-wXpWzyOyPYiqwE2vklV5lWUlZkqE-vbPMVO-M")
 
 # Register sheet
 invoices_doc <- gs_key("1nEgjeMrNZYPhfVy27_4v8kEeeIWYTzdCBkdEQoOvPIU")
+
+
+
+# TEST
+#num_worksheets = invoices_doc$n_ws
+#template = invoices_doc %>% gs_read(ws = num_worksheets-5)
 

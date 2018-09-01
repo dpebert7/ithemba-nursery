@@ -51,11 +51,11 @@ shinyServer(function(input, output, session) {
     DF$Total = DF$Qty*DF$Cost
     DF$Total = na_if(DF$Total,0)
     DF$Season = as.character(DF$Season)
-    DF$`In Stock` = as.character(DF$`In Stock`)
+    #DF$`In Stock` = as.character(DF$`In Stock`)
     if(!is.null(DF))
       rhandsontable(DF, stretchH = "allf", rowHeaders = NULL, height = 603) %>%  
                                                               #Can also try 1303 for height
-      hot_col(c("Description", "Cost", "Total", "Season", "Unit", "In Stock"), readOnly = TRUE) %>%
+      hot_col(c("Description", "Cost", "Total", "Season", "Unit"), readOnly = TRUE) %>%
       hot_col(c("Cost","Total"), format = "$ 0/.00", language = "en-ZA") %>%
       #hot_col("Qty", td.style.background = 'grey') %>% # This isn't working :(
       hot_context_menu(allowRowEdit = FALSE, allowColEdit = FALSE) %>%
@@ -93,13 +93,14 @@ shinyServer(function(input, output, session) {
       order_df = values[["DF"]]
       order_df = order_df[!is.na(order_df$Total),]
       total_cost_df = values[["mini_DF"]]
+      invoices_doc <- gs_key("1nEgjeMrNZYPhfVy27_4v8kEeeIWYTzdCBkdEQoOvPIU")
       num_worksheets = invoices_doc$n_ws
       invoice_name = paste0(form_df[[1]],"-",num_worksheets)
       customer_info = data.frame(
-        c("Invoice Name:", "Name:", "Email:", "Phone:", "Pickup:", "Preferred Contact:", 
-          "Comment:", "Timestamp:", "Total Cost"), 
+        c("Invoice Name:", "Customer Name:", "Email:", "Phone:", "Pickup:", "Preferred Contact:", 
+          "Comment:", "Total Cost"), 
         c(invoice_name, form_df[[1]], form_df[[2]], form_df[[3]], form_df[[4]], form_df[[5]], 
-          form_df[[6]], form_df[[7]], as.character(sum(order_df$Total))))
+          form_df[[6]], as.character(sum(order_df$Total))))
       names(customer_info) = NULL
       
       # save customer info to new line
@@ -108,15 +109,20 @@ shinyServer(function(input, output, session) {
       
       # Save customer and order info to invoice sheet
       invoices_doc <- invoices_doc %>%
-        gs_ws_new(ws_title = invoice_name, row_extent = 50, col_extent = 8) %>%
-        gs_edit_cells(ws = invoice_name, input = customer_info)  %>%
-        gs_edit_cells(ws = invoice_name, input = order_df, anchor = "R11C1")
+        #gs_ws_copy()  <-- Doesn't exist!
+        #gs_ws_new(ws_title = invoice_name, row_extent = 50, col_extent = 8) %>%
+        gs_ws_new(paste0("IGNORE ME! ", invoice_name)) %>%
+        gs_ws_rename(from = num_worksheets-20, to = invoice_name) %>%
+        gs_edit_cells(ws = invoice_name, input = customer_info, anchor = "R12C1")  %>%
+        gs_edit_cells(ws = invoice_name, input = order_df, anchor = "R22C1")
       
       # Send Email
       send.mail(from = "ithembagardens@gmail.com",
-                to = c("dpebert7@gmail.com", "ithembagardens@gmail.com"),
+                to = c("dpebert7@gmail.com", "ithembagardens@gmail.com",
+                       "lunga@ithembaprojects.org.za", "sanele@ithembaprojects.org.za"),
                 subject = "New Order",
-                body = paste("New iThemba Gardens order. Invoice:", invoice_name),
+                body = paste("New iThemba Gardens order. Invoice:", invoice_name,
+                             "https://docs.google.com/spreadsheets/d/1nEgjeMrNZYPhfVy27_4v8kEeeIWYTzdCBkdEQoOvPIU/edit?usp=sharing"),
                 smtp = list(host.name = "smtp.gmail.com", port = 465, 
                             user.name = "ithembagardens", 
                             passwd = "123Password!", ssl = TRUE),

@@ -32,8 +32,6 @@ shinyUI(fluidPage(
           includeMarkdown(file.path("text", "about.md"))
           ),    
 
-        
-
 # SECOND TAB: PICKUP
 
         tabPanel(
